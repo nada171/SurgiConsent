@@ -1,0 +1,18 @@
+[toolchain]
+anchor_version = "1.0.2"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.devnet]
+surgi_consent = "6GQdMpD72WwzxsXm6q52ED3UDYFU4i7tH8pLVoHgSBcY"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "pnpm test"
+
+[hooks]
