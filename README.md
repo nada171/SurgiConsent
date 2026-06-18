@@ -8,13 +8,22 @@ A Solana smart contract that provides a tamper-evident, immutable audit trail fo
 
 ## Overview
 
-SurgiConsent anchors the consent lifecycle to the blockchain. Each consent document managed off-chain is represented by a PDA that tracks its status, document hash, and the full history of updates through on-chain events. Any tampering with a consent document is immediately detectable by comparing its SHA-256 hash against the value recorded on-chain.
+SurgiConsent digitizes and secures the surgical consent process between hospitals, doctors, and patients — anchoring every step to the Solana blockchain so that no party can later dispute or alter what was agreed.
+
+**How it works in practice:**
+
+1. **The hospital registers itself** and builds a whitelist of doctors authorized to create consent forms on its behalf.
+2. **The hospital or a whitelisted doctor creates a consent record** for a specific patient and procedure — this includes a cryptographic hash of the actual consent document (which lives off-chain, e.g. in a hospital database), describing the procedure and its risks.
+3. **The patient (or their legal surrogate, if a minor) reviews the document off-chain and signs on-chain** — this action is permanently recorded with a timestamp, proving the patient was informed of and agreed to the risks before surgery.
+4. **A doctor approves the consent** within a 24-hour window after the patient signs, finalizing it as legally binding.
+5. If anything in the document changes, or if the consent needs to be withdrawn or overridden in an emergency, **every change is logged on-chain** — creating a permanent, tamper-proof audit trail of who agreed to what, and when.
+
+Because the hash of the document is locked the moment the patient signs, **any attempt to alter the consent form after the fact is immediately detectable** — the stored hash will no longer match the modified document. This protects both patients (their informed consent can't be silently changed) and hospitals (they have cryptographic proof the patient was informed and agreed).
 
 The program enforces:
 - **Access control** — only the registered hospital or its whitelisted doctors can create consents; only the hospital can update or override them.
 - **State machine integrity** — consent status transitions are validated on-chain and cannot be bypassed.
 - **Emergency access** — a dedicated override instruction allows the hospital to act in emergencies while still leaving a verifiable on-chain record.
-
 ---
 
 ## Program ID
